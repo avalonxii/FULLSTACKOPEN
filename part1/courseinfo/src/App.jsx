@@ -6,13 +6,17 @@ function Header(props) {
   )
 }
 
+function Part(props) {
+  return (
+    <p>{props.part} {props.exercises}</p>
+  )
+}
+
 function Content(props) {
   return (
     <>
       {props.data.map(( { part, exercises }, index ) => (
-        <p key={index}>
-          {part} {exercises}
-        </p>
+        <Part key={index} part={part} exercises={exercises}/>
       ))}
     </>
   )
