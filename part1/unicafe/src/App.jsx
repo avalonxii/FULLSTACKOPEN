@@ -3,7 +3,10 @@ import { useState } from 'react'
 
 function StatisticLine({ text, value }) {
   return (
-    <p > { text } { value } </p>
+    <>
+      <td>{ text }</td>
+      <td>{ value }</td>
+    </>
   )
 }
 
@@ -15,13 +18,17 @@ function Statistics( props ) {
   }
 
   return (
-    <>
-      {
-        Object.entries(props).map(([ key, value ]) => (
-          <StatisticLine key={key} text={key} value={value} />
-        ))
-      }
-    </>
+    <table>
+      <tbody>
+        {
+          Object.entries(props).map(([ key, value ]) => (
+              <tr key={key}>
+                <StatisticLine text={key} value={value} />
+              </tr>
+          ))
+        }
+      </tbody>
+    </table>
   )
 }
 
@@ -40,34 +47,39 @@ function App() {
   const [total, setTotal] = useState(0)
   const [average, setAverage] = useState(0)
   const [positive, setPositive] = useState(0)
-  
+
+  const truncDecimal = (num) => Math.trunc(num * 10) / 10
+ 
   const handlerGood = () => {
     const updatedAll = all + 1
     const updatedTotal = total + 1
-    const updatedGood= good + 1
+    const updatedGood = good + 1
+    const totalPositive = truncDecimal(updatedGood / updatedAll * 100)
     setGood(updatedGood)
     setAll(updatedAll)
     setTotal(updatedTotal )
-    setAverage(updatedTotal / updatedAll)
-    setPositive(updatedGood / updatedAll)
+    setAverage(truncDecimal(updatedTotal / updatedAll))
+    setPositive(totalPositive)
   }
 
   const handlerNeutral = () => {
     const updatedAll = all + 1
+    const totalPositive = truncDecimal(good / updatedAll * 100)
     setNeutral(neutral + 1)
     setAll(updatedAll)
-    setAverage(total / updatedAll)
-    setPositive(good / updatedAll)
+    setAverage(truncDecimal(total / updatedAll, 1))
+    setPositive(totalPositive)
   }
 
   const handlerBad = () => {
     const updatedAll = all + 1
     const updatedTotal = total - 1
+    const totalPositive = truncDecimal(good / updatedAll * 100)
     setBad(bad + 1)
     setAll(updatedAll)
     setTotal(updatedTotal )
-    setAverage(updatedTotal / updatedAll)
-    setPositive(good / updatedAll)
+    setAverage(truncDecimal(updatedTotal / updatedAll))
+    setPositive(totalPositive)
   }
 
   return (
@@ -76,7 +88,7 @@ function App() {
       <Button handleClick={handlerGood} text={'good'} />
       <Button handleClick={handlerNeutral} text={'neutral'} />
       <Button handleClick={handlerBad} text={'bad'} />
-      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={(positive * 100) + '%'} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive + '%'} />
     </div>
   )
 }
