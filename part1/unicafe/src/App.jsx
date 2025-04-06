@@ -1,20 +1,33 @@
 import { useState } from 'react'
 
-function Statistics({good, neutral, bad, all, average, positive = 0}) {
+
+function StatisticLine({ text, value }) {
+  return (
+    <p > { text } { value } </p>
+  )
+}
+
+function Statistics( props ) {
+  const { good, neutral, bad } = props
+
   if (good === 0 && neutral === 0 && bad === 0){
     return <p>No feedback given</p>
   }
 
   return (
     <>
-      <h2>statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive * 100} %</p>
+      {
+        Object.entries(props).map(([ key, value ]) => (
+          <StatisticLine key={key} text={key} value={value} />
+        ))
+      }
     </>
+  )
+}
+
+function Button({ handleClick, text }) {
+  return (
+    <button onClick={ handleClick }> { text } </button>
   )
 }
 
@@ -60,10 +73,10 @@ function App() {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={handlerGood}>good</button>
-      <button onClick={handlerNeutral}>neutral</button>
-      <button onClick={handlerBad}>bad</button>
-      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
+      <Button handleClick={handlerGood} text={'good'} />
+      <Button handleClick={handlerNeutral} text={'neutral'} />
+      <Button handleClick={handlerBad} text={'bad'} />
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={(positive * 100) + '%'} />
     </div>
   )
 }
