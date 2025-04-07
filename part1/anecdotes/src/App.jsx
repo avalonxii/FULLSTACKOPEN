@@ -1,5 +1,14 @@
 import { useState } from 'react'
 
+function Anecdote({anecdote, votes}) {
+  return (
+    <>
+      <p>{ anecdote }</p>
+      <p>has { votes } votes</p>
+    </>
+  )
+}
+
 function App() {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -15,7 +24,7 @@ function App() {
   const [selected, setSelected] = useState(0)
   const [lastAnecdote, setLastAnecdote] = useState(selected)
   const [votes, setVotes] = useState(Array(8).fill(0))
-
+  const [maxVotes, setMaxVotes] = useState(0)
 
   const handlerAnecdote = () => {
     let newAnecdote
@@ -32,14 +41,24 @@ function App() {
     const copyVotes = [...votes]
     copyVotes[selected] += 1
     setVotes([...copyVotes])
+    SearchMaxVotes(copyVotes)
+  }
+
+  const SearchMaxVotes = (copyVotes) => {
+    const MaxVotesNumber = Math.max(...copyVotes)
+    const MaxVotesIndex = copyVotes.indexOf(MaxVotesNumber)
+    setMaxVotes(MaxVotesIndex)
   }
 
   return (
     <div>
-      <p>{ anecdotes[selected] }</p>
-      <p>has { votes[selected] } votes</p>
+      <h1>Anecdote of the day</h1>
+      <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
       <button onClick={handlerVote}>vote</button>
       <button onClick={handlerAnecdote}>Next anecdote</button>
+
+      <h1>Anecdote with most votes</h1>
+      <Anecdote anecdote={anecdotes[maxVotes]} votes={votes[maxVotes]} />
     </div>
   )
 }
