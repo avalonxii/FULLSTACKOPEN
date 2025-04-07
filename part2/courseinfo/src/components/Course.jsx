@@ -1,3 +1,4 @@
+// They are already componentized
 import Header from './Header'
 import Content from './Content'
 import Total from './Total'
