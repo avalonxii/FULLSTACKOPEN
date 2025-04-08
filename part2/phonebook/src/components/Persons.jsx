@@ -14,7 +14,7 @@ function Persons({ persons, filtre}) {
           }
         })
         .map( person => (
-          <Person data={person}/>
+          <Person key={person.name} data={person}/>
       ))}
     </>
   )
