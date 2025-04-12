@@ -70,7 +70,7 @@ function App() {
         ]}/>
 
       <h2>Numbers</h2>
-      <Persons persons={persons} filtre={filterName}/>
+      <Persons persons={persons} setPersons={setPersons} filter={filterName}/>
     </div>
   )
 }
