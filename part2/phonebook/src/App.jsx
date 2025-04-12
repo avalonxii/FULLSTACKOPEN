@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import phonebook from './service/phonebook'
 
 function App() {
   const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ function App() {
   const [filterName, setFilterName] = useState('')
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
+    phonebook
+      .getAll()
       .then(res => {
-        setPersons(res.data)
+        setPersons(res)
       })
   }, [])
 
@@ -27,14 +27,17 @@ function App() {
       
     } else {
       const newPerson = {
-        id: persons.length + 1,
         name: newName,
         number: newNumber
       }
-  
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+
+      phonebook
+      .create(newPerson)
+      .then(returnedNote =>{
+        setPersons(persons.concat(returnedNote))
+        setNewName('')
+        setNewNumber('')
+      } )
     }
   }
 
@@ -62,8 +65,8 @@ function App() {
       <PersonForm 
         onSave={addPerson} 
         inputs={[
-          {id: 'name', name: newName, handler: handlerNameChange},
-          {id: 'number', name:newNumber, handler: handlerNumberChange}
+          {id: 'name', value: newName, handler: handlerNameChange},
+          {id: 'number', value:newNumber, handler: handlerNumberChange}
         ]}/>
 
       <h2>Numbers</h2>

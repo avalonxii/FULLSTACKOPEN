@@ -3,9 +3,9 @@ function PersonForm({ onSave, inputs }) {
   return (
     <form onSubmit={onSave}>
       {inputs
-        .map( ({id, name, handler}) => 
+        .map( ({id, value, handler}) => 
           <div key={id}>
-            {id}: <input value={name} onChange={handler}/>
+            {id}: <input value={value} onChange={handler}/>
           </div>
       )}
 
