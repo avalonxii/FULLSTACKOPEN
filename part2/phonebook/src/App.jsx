@@ -21,24 +21,48 @@ function App() {
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (isNameAdded(newName) || isNumberAdded(newNumber) ) {
-      const valueToShow = isNameAdded(newName) ? newName : newNumber;
-      showAlert(valueToShow)
-      
-    } else {
-      const newPerson = {
-        name: newName,
-        number: newNumber
-      }
+    const message = 'is already added to phonebook, replace the old number with a new one?'
 
-      phonebook
-      .create(newPerson)
-      .then(returnedNote =>{
-        setPersons(persons.concat(returnedNote))
-        setNewName('')
-        setNewNumber('')
-      } )
+    if (isNumberAdded(newNumber)) {
+      showAlert(newNumber)
+
+      return 0
     }
+
+    const newPerson = {
+      name: newName,
+      number: newNumber
+    }
+    
+    if (isNameAdded(newName) && window.confirm(`${newName} ${message}`)) {
+      updatePerson(newPerson)
+      
+    }else {
+      createPerson(newPerson)
+    } 
+  }
+
+  const createPerson = (newPerson) => {
+    phonebook
+    .create(newPerson)
+    .then(returnedNote =>{
+      setPersons(persons.concat(returnedNote))
+      setNewName('')
+      setNewNumber('')
+    })
+  }
+
+  const updatePerson = (newPerson) => {
+    
+    const personToUpdate = persons.find( person => person.name === newPerson.name )
+
+    phonebook
+    .update(personToUpdate.id, newPerson)
+    .then( res => {
+      const UpdatedPersons = persons.map( person => person.id === personToUpdate.id ? res : person)
+      setPersons(UpdatedPersons)
+    })
+    
   }
 
   const handlerNameChange = (event) => {
