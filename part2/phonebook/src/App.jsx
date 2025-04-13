@@ -12,7 +12,8 @@ function App() {
   const [filterName, setFilterName] = useState('')
   const [alertMssg, setAlertMssg] = useState({
     open: false,
-    text: ''
+    text: '',
+    style: ''
   })
 
   useEffect(() => {
@@ -56,7 +57,8 @@ function App() {
       setNewNumber('')
       setAlertMssg({
         open: true,
-        text: `Added ${newPerson.name}`
+        text: `Added ${newPerson.name}`,
+        style: 'success'
       })
 
       setTimeout(resertAlert, 2000)
@@ -64,7 +66,6 @@ function App() {
   }
 
   const updatePerson = (newPerson) => {
-    
     const personToUpdate = persons.find( person => person.name === newPerson.name )
 
     phonebook
@@ -73,6 +74,28 @@ function App() {
       const UpdatedPersons = persons.map( person => person.id === personToUpdate.id ? res : person)
       setPersons(UpdatedPersons)
     })
+    .catch(() => {
+      setAlertMssg({
+        open: true,
+        text: `Infirmation of ${personToUpdate.name} has already been removed froms server`,
+        style: 'error'
+      })
+
+      setTimeout(resertAlert, 2000)
+    })
+  }
+
+  const deletePerson = (id) => {
+    const chosenPerson = persons.find( person => person.id === id)
+    
+    if (window.confirm(`delete ${chosenPerson.name} ?`)) {
+      phonebook
+      .deleteObject(id)
+      .then(res => {
+        const updatedPersons = persons.filter( person => person.id !== res.id)
+        setPersons(updatedPersons)
+      })
+    }
   }
 
   const handlerNameChange = (event) => {
@@ -101,7 +124,7 @@ function App() {
     <div>
       <h2>Phonebook</h2>
       {alertMssg.open && (
-        <Alert message={alertMssg.text}/>
+        <Alert message={alertMssg.text} modify={alertMssg.style}/>
       )}
       <Filter filterValue={filterName} onFilter={e => setFilterName(e.target.value)}/>
 
@@ -114,7 +137,7 @@ function App() {
         ]}/>
 
       <h2>Numbers</h2>
-      <Persons persons={persons} setPersons={setPersons} filter={filterName}/>
+      <Persons persons={persons} handlerDelete={deletePerson} filter={filterName}/>
     </div>
   )
 }

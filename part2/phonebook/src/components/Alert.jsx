@@ -1,5 +1,5 @@
 
-function Alert({message, modify='success'}) {
+function Alert({message, modify}) {
   return (
     <div className={`c-alert ${modify}`}>{message}</div>
   )
