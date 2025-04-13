@@ -3,12 +3,17 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import phonebook from './service/phonebook'
+import Alert from './components/Alert'
 
 function App() {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [alertMssg, setAlertMssg] = useState({
+    open: false,
+    text: ''
+  })
 
   useEffect(() => {
     phonebook
@@ -49,6 +54,12 @@ function App() {
       setPersons(persons.concat(returnedNote))
       setNewName('')
       setNewNumber('')
+      setAlertMssg({
+        open: true,
+        text: `Added ${newPerson.name}`
+      })
+
+      setTimeout(resertAlert, 2000)
     })
   }
 
@@ -62,7 +73,6 @@ function App() {
       const UpdatedPersons = persons.map( person => person.id === personToUpdate.id ? res : person)
       setPersons(UpdatedPersons)
     })
-    
   }
 
   const handlerNameChange = (event) => {
@@ -80,9 +90,19 @@ function App() {
     alert(`${message} is already added to phonebook`);
   }
 
+  const resertAlert = () => {
+    setAlertMssg({
+      open: false,
+      text: ''
+    })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      {alertMssg.open && (
+        <Alert message={alertMssg.text}/>
+      )}
       <Filter filterValue={filterName} onFilter={e => setFilterName(e.target.value)}/>
 
       <h2>add a new</h2>
