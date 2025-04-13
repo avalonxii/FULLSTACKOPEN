@@ -17,21 +17,24 @@ function Persons({ persons, setPersons, filter}) {
     }
   }
 
+  const test = persons.filter( person => {
+    if (filter === '') {
+      return true;
+
+    } else {
+      return !person.name.toLocaleLowerCase().search(filter.toLowerCase());
+    }
+  })
+
   return (
     <>
-      {persons
-        .filter( person => {
-          if (filter === '') {
-            return true;
-
-          } else {
-            return !person.name.toLocaleLowerCase().search(filter.toLowerCase());
-
-          }
-        })
-        .map( person => (
+      {
+        test.length !== 0
+        ? test.map( person => (
           <Person key={person.name} data={person} onDelete={deletePerson}/>
-      ))}
+        ))
+        : <p> <strong>not found in the phonebook</strong></p>
+      }
     </>
   )
 }
