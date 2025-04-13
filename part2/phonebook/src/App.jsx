@@ -21,13 +21,13 @@ function App() {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const message = 'is already added to phonebook, replace the old number with a new one?'
-
     if (isNumberAdded(newNumber)) {
       showAlert(newNumber)
 
       return 0
     }
+
+    const message = 'is already added to phonebook, replace the old number with a new one?'
 
     const newPerson = {
       name: newName,
