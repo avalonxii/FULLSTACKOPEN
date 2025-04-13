@@ -22,7 +22,7 @@ function Persons({ persons, setPersons, filter}) {
       return true;
 
     } else {
-      return !person.name.toLocaleLowerCase().search(filter.toLowerCase());
+      return person.name.toLocaleLowerCase().includes(filter.toLowerCase());
     }
   })
 
