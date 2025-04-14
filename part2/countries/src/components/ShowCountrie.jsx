@@ -1,10 +1,6 @@
 import React from 'react'
 
 function ShowCountrie({ countrie }) {
-
-  console.log(countrie.languages);
-  
-
   return (
     <div>
       <h1>{countrie.name.common}</h1>

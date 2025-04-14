@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import conexion from '../services/countries'
-import ShowCountrie from '../components/ShowCountrie'
+import ShowCountrie from './components/ShowCountrie'
+import CountriesList from './components/CountriesList'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -34,7 +35,7 @@ function App() {
         ? <p>Too many matches, specify another filter</p>
 
         : countriesFiltered.length > 1
-        ? countriesFiltered.map( countrie => <p key={countrie.name.common}>{countrie.name.common}</p>)
+        ? <CountriesList countries={countriesFiltered} setValue={setFilterCountrie} />
 
         : countriesFiltered.length === 1
         ? <ShowCountrie countrie={countriesFiltered[0]}/>
