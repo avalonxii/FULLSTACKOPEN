@@ -1,4 +1,3 @@
-import React from 'react'
 
 function CountriesList({countries, setValue}) {
   return (
